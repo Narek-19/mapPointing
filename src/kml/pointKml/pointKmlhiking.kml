@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"> 
+<Placemark>
+<name>Nor Arajadzor</name>
+<description>Village in Armenia</description>
+<Point>
+<coordinates>39.3373440134751,46.403679535402354</coordinates>
+</Point>
+</Placemark> 
+<Placemark>
+<name>Verin Khotanan</name>
+<description>Verin Khotanan is a village in the Kapan Municipality of the Syunik Province in Armenia.</description>
+<Point>
+<coordinates>39.319019686672455,46.39578311187514</coordinates>
+</Point>
+</Placemark> 
+<Placemark>
+<name>Antarashat</name>
+<description>Antarashat is a village in the Kapan Municipality of the Syunik Province in Armenia.</description>
+<Point>
+<coordinates>39.321144492376675,46.363854095004214</coordinates>
+</Point>
+</Placemark> 
+<Placemark>
+<name>Antarashat Mount</name>
+<description>Mount for hiking</description>
+<Point>
+<coordinates>39.31450426025532,46.34394137480515</coordinates>
+</Point>
+</Placemark> 
+<Placemark>
+<name>Hiking mamor</name>
+<description>Mamur Garden(named 2023 by hikers)</description>
+<Point>
+<coordinates>39.32672180026848,46.32265536355785 </coordinates>
+</Point>
+</Placemark> 
+<Placemark>
+<name>Простая метка</name>
+<description>Привязана к земной поверхности. Приспосабливается к рельефу местности.</description>
+<Point>
+<coordinates>39.34159244691837,46.313042326220376</coordinates>
+</Point>
+</Placemark> 
+<Placemark>
+<name>Простая метка</name>
+<description>Привязана к земной поверхности. Приспосабливается к рельефу местности.</description>
+<Point>
+<coordinates>39.3556635384045,46.26806704439144</coordinates>
+</Point>
+</Placemark> 
+<Placemark>
+<name>Простая метка</name>
+<description>Привязана к земной поверхности. Приспосабливается к рельефу местности.</description>
+<Point>
+<coordinates>39.37026261859072,46.259140652578054</coordinates>
+</Point>
+</Placemark> 
+</kml>

@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { toxmaxlich, riomall } from "../consts";
+import { hikingPath } from "../consts";
 import "./style.css";
+import { point } from "leaflet";
 
 export const MyMap = () => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
-// toxmax lich nkari
-  const topLeft = { lat: 40.157981372660885, lng: 44.520988836669886 };
-  const bottomRight = { lat: 40.14575792720048, lng: 44.539621113691865 };
+  // toxmax lich nkari
+  const topLeft = { lat: 39.38724679757667, lng: 46.19287935950184 };
+  const bottomRight = { lat: 39.26481533703087, lng: 46.44075839370408 };
 
   // riomall nkari
   //  const topLeft = { lat: 40.20245128588071, lng: 44.50375361118862 };
@@ -38,27 +39,43 @@ export const MyMap = () => {
 
     // draw map image
     const mapImage = new Image();
-    mapImage.src = "./lich.png";
+    mapImage.src = "./hikingPathArmenia.png";
 
     mapImage.onload = () => {
+      console.log("here");
+      const points = [];
       context.drawImage(mapImage, 0, 0, imgWidth, imgHeight);
 
       // draw sample pointss
-      toxmaxlich.forEach((point) => {
+      hikingPath.forEach((point) => {
         const x = ((point.lng - lngMin) / (lngMax - lngMin)) * imgWidth;
         const y = ((point.lat - latMin) / (latMax - latMin)) * imgHeight;
+        points.push({ x, y });
+        // setPaths([...paths, { x: x, y: y }]);
 
         context.beginPath();
-        context.arc(x, y, 5, 0, 2 * Math.PI);
-        context.fillStyle = "red";
+        context.arc(x, y, 6, 0, 2 * Math.PI);
+        context.fillStyle = "green";
         context.fill();
         context.closePath();
-
-        setPaths([...paths, { x: x, y: y }]);
       });
-      console.log(paths, "paths");
+      console.log(points, "points");
+
+      for (let i = 0; i < points.length; i++) {
+        context.lineWidth = 3;
+        context.beginPath();
+        context.setLineDash([8, 9]);
+        context.moveTo(points[i].x, points[i].y);
+        if (i !== points.length - 1) {
+          context.lineTo(points[i + 1].x, points[i + 1].y);
+          context.strokeStyle = "orange";
+          context.stroke();
+        }
+      }
     };
   }, []);
+
+  console.log(paths, "paths");
 
   return (
     <div style={{ width: "619px", position: "relative" }}>
