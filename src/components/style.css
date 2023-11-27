@@ -1,0 +1,6 @@
+.point-marker {
+    width: 10px;
+    height: 10px;
+    background-color: red; /* Adjust the color as needed */
+    border-radius: 50%;
+  }
