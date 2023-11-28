@@ -1,28 +1,47 @@
 import React, { useEffect, useRef, useState } from "react";
-import { hikingPath } from "../consts";
+import { kml } from "@tmcw/togeojson";
 import "./style.css";
-import { point } from "leaflet";
 
 export const MyMap = () => {
+  const [geoJson, setGeoJson] = useState();
+  // const [kmlFile,setKmlFile] = useState();
+
+  // const fileUploader = useRef();
+
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
+// console.log(kmlFile,"kml file");
   // toxmax lich nkari
   const topLeft = { lat: 39.38724679757667, lng: 46.19287935950184 };
   const bottomRight = { lat: 39.26481533703087, lng: 46.44075839370408 };
 
-  // riomall nkari
-  //  const topLeft = { lat: 40.20245128588071, lng: 44.50375361118862 };
-  // const bottomRight = { lat: 40.20084825152563, lng: 44.50621287123156 };
+  // const fileChange =(event)=>{
+  //   event.stopPropagation();
+  //   event.preventDefault();
+  //   console.log(event.target.files,"target");
+  //   const file = event.target.files[0];
+  //   console.log(file);
+  //   setKmlFile(file);
+  // }
 
-  // const topLeft = {lat:riomall[0].lat, lng:riomall[0].lng}
-  // const bottomRight = {lat:riomall[riomall.length-1].lat, lng:riomall[riomall.length-1].lng}
 
-  // console.log(topLeft, bottomRight,"here");
+  // const handleUploadFile = (e) => {
+  //   fileUploader.current.click();
+  // };
+
 
   const imageSize = [619, 534];
 
-  const [paths, setPaths] = useState([]);
+  const fetchGeoData = async () => {
+    const response = await fetch("http://localhost:3000/mix1.geojson");
+    const data = await response.json();
+    setGeoJson(data);
+  };
+
+  useEffect(() => {
+    fetchGeoData();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,25 +65,46 @@ export const MyMap = () => {
       const points = [];
       context.drawImage(mapImage, 0, 0, imgWidth, imgHeight);
 
-      // draw sample pointss
-      hikingPath.forEach((point) => {
-        const x = ((point.lng - lngMin) / (lngMax - lngMin)) * imgWidth;
-        const y = ((point.lat - latMin) / (latMax - latMin)) * imgHeight;
-        points.push({ x, y });
-        // setPaths([...paths, { x: x, y: y }]);
-
-        context.beginPath();
-        context.arc(x, y, 6, 0, 2 * Math.PI);
-        context.fillStyle = "green";
-        context.fill();
-        context.closePath();
+      console.log({hassData:Boolean(geoJson),geoJson},"geoJson");
+      
+      if(geoJson){
+        // debugger
+        if(geoJson.type === "FeatureCollection"){
+          geoJson.features.forEach((el)=>{
+           if(el.geometry.type === "Point"){
+            const lat = el.geometry.coordinates[0];
+            const lng = el.geometry.coordinates[1];
+            const x = ((lng - lngMin) / (lngMax - lngMin)) * imgWidth;
+            const y = ((lat - latMin) / (latMax - latMin)) * imgHeight;
+              points.push({ x, y, type:"Point" });
+           }else if(el.geometry.type === "LineString"){
+              el.geometry.coordinates.map((el)=>{
+                const lat = el[0];
+                const lng = el[1];
+                const x = ((lng - lngMin) / (lngMax - lngMin)) * imgWidth;
+                const y = ((lat - latMin) / (latMax - latMin)) * imgHeight;
+                  points.push({ x, y, type:"LineString" });
+              })
+           }
+          })
+        }
+      }
+      // ------------------------------------------------
+      console.log(points,"here points")
+      points.forEach((point) => {
+        if(point.type === "Point"){
+          context.beginPath();
+          context.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+          context.fillStyle = "green";
+          context.fill();
+          context.closePath();
+        }
       });
-      console.log(points, "points");
 
       for (let i = 0; i < points.length; i++) {
         context.lineWidth = 3;
         context.beginPath();
-        context.setLineDash([8, 9]);
+        context.setLineDash([5, 9]);
         context.moveTo(points[i].x, points[i].y);
         if (i !== points.length - 1) {
           context.lineTo(points[i + 1].x, points[i + 1].y);
@@ -73,13 +113,15 @@ export const MyMap = () => {
         }
       }
     };
-  }, []);
+  }, [geoJson]);
 
-  console.log(paths, "paths");
 
   return (
     <div style={{ width: "619px", position: "relative" }}>
+     
+      {/* <input style={{ display: "none" }} ref={fileUploader} type="file" onChange={fileChange}/> */}
       <canvas ref={canvasRef} width={619} height={534} className="map-canvas" />
+       {/* <button onClick ={handleUploadFile}>Upload File</button> */}
     </div>
   );
 };
